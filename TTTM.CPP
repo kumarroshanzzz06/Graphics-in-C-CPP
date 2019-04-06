@@ -1,0 +1,2856 @@
+#include<graphics.h>
+#include<iostream.h>
+#include<conio.h>
+#include<dos.h>
+#include<math.h>
+#include<stdlib.h>
+#include<time.h>
+union REGS in,out;
+int xp=100,yp=100,cl;
+int gd=DETECT,gm,compl;
+int b1,b2,b3,b4,b5,b6,b7,b8,b9,usr;
+char x1[10];
+void main();
+void cross(int,int);
+void sqbox();
+void chkl();
+void optn1();
+void one_player();
+void goal(int,int);
+int callmouse()
+{
+	in.x.ax=1;
+	int86(51,&in,&out);
+	return 1;
+}
+void mouseposi (int &xpos,int &ypos,int &click)
+{
+	in.x.ax=3;
+	int86(51,&in,&out);
+	click=out.x.bx;
+	xpos=out.x.cx;
+	ypos=out.x.dx;
+}
+int mousehide()
+{
+	in.x.ax=2;
+	int86(51,&in,&out);
+	return 1;
+}
+void setposi(int &xpos,int &ypos)
+{
+	in.x.ax=4;
+	in.x.cx=xpos;
+	in.x.dx=ypos;
+	int86(51,&in,&out);
+}
+void chose1()
+{
+	usr++;
+	delay(1000);
+	b1=0;
+	mousehide();
+	setcolor(9);
+	outtextxy(20,380,"!!!...COMPUTER'S MOVE...!!!");
+	setcolor(15);
+	outtextxy(20,380,"!!!...PLAYER'S MOVE...!!!");
+	x1[0]='g';
+	goal(0,0);
+	callmouse();
+	setposi(xp,yp);
+}
+void chose2()
+{
+	usr++;
+	delay(1000);
+	b2=0;
+	mousehide();
+	setcolor(9);
+	outtextxy(20,380,"!!!...COMPUTER'S MOVE...!!!");
+	setcolor(15);
+	outtextxy(20,380,"!!!...PLAYER'S MOVE...!!!");
+	x1[1]='g';
+	goal(80,0);
+	callmouse();
+	setposi(xp,yp);
+}
+void chose3()
+{
+	usr++;
+	delay(1000);
+	b3=0;
+	mousehide();
+	setcolor(9);
+	outtextxy(20,380,"!!!...COMPUTER'S MOVE...!!!");
+	setcolor(15);
+	outtextxy(20,380,"!!!...PLAYER'S MOVE...!!!");
+	x1[2]='g';
+	goal(160,0);
+	callmouse();
+	setposi(xp,yp);
+}
+void chose4()
+{
+	usr++;
+	delay(1000);
+	b4=0;
+	mousehide();
+	setcolor(9);
+	outtextxy(20,380,"!!!...COMPUTER'S MOVE...!!!");
+	setcolor(15);
+	outtextxy(20,380,"!!!...PLAYER'S MOVE...!!!");
+	x1[3]='g';
+	goal(0,80);
+	callmouse();
+	setposi(xp,yp);
+}
+void chose5()
+{
+	b5=0;
+	usr++;
+	delay(1000);
+	mousehide();
+	setcolor(9);
+	outtextxy(20,380,"!!!...COMPUTER'S MOVE...!!!");
+	setcolor(15);
+	outtextxy(20,380,"!!!...PLAYER'S MOVE...!!!");
+	x1[4]='g';
+	goal(80,80);
+	callmouse();
+	setposi(xp,yp);
+}
+void chose6()
+{
+	usr++;
+	delay(1000);
+	b6=0;
+	mousehide();
+	setcolor(9);
+	outtextxy(20,380,"!!!...COMPUTER'S MOVE...!!!");
+	setcolor(15);
+	outtextxy(20,380,"!!!...PLAYER'S MOVE...!!!");
+	x1[5]='g';
+	goal(160,80);
+	callmouse();
+	setposi(xp,yp);
+}
+void chose7()
+{
+	usr++;
+	delay(1000);
+	b7=0;
+	mousehide();
+	setcolor(9);
+	outtextxy(20,380,"!!!...COMPUTER'S MOVE...!!!");
+	setcolor(15);
+	outtextxy(20,380,"!!!...PLAYER'S MOVE...!!!");
+	x1[6]='g';
+	goal(0,160);
+	callmouse();
+	setposi(xp,yp);
+}
+void chose8()
+{
+	usr++;
+	delay(1000);
+	b8=0;
+	mousehide();
+	setcolor(9);
+	outtextxy(20,380,"!!!...COMPUTER'S MOVE...!!!");
+	setcolor(15);
+	outtextxy(20,380,"!!!...PLAYER'S MOVE...!!!");
+	x1[7]='g';
+	goal(80,160);
+	callmouse();
+	setposi(xp,yp);
+}
+void chose9()
+{
+	usr++;
+	delay(1000);
+	b9=0;
+	mousehide();
+	setcolor(9);
+	outtextxy(20,380,"!!!...COMPUTER'S MOVE...!!!");
+	setcolor(15);
+	outtextxy(20,380,"!!!...PLAYER'S MOVE...!!!");
+	x1[8]='g';
+	goal(160,160);
+	callmouse();
+	setposi(xp,yp);
+}
+void jeet1()
+{
+	mousehide();
+	goal(0,0);
+	x1[0]='g';
+	callmouse();
+	setposi(xp,yp);
+	chkl();
+}
+void jeet2()
+{
+	mousehide();
+	goal(80,0);
+	x1[1]='g';
+	callmouse();
+	setposi(xp,yp);
+	chkl();
+}
+void jeet3()
+{
+	mousehide();
+	goal(160,0);
+	x1[2]='g';
+	callmouse();
+	setposi(xp,yp);
+	chkl();
+}
+void jeet4()
+{
+	mousehide();
+	goal(0,80);
+	x1[3]='g';
+	callmouse();
+	setposi(xp,yp);
+	chkl();
+}
+void jeet5()
+{
+	mousehide();
+	goal(80,80);
+	x1[4]='g';
+	callmouse();
+	setposi(xp,yp);
+	chkl();
+}
+void jeet6()
+{
+	mousehide();
+	goal(160,80);
+	x1[5]='g';
+	callmouse();
+	setposi(xp,yp);
+	chkl();
+}
+void jeet7()
+{
+	mousehide();
+	goal(0,160);
+	x1[6]='g';
+	callmouse();
+	setposi(xp,yp);
+	chkl();
+}
+void jeet8()
+{
+	mousehide();
+	goal(80,160);
+	x1[7]='g';
+	callmouse();
+	setposi(xp,yp);
+	chkl();
+}
+void jeet9()
+{
+	mousehide();
+	goal(160,160);
+	x1[8]='g';
+	callmouse();
+	setposi(xp,yp);
+	chkl();
+}
+int random_comp()
+{
+	int rn1;
+	usr++;
+	delay(500);
+	rn1=random(9);
+	switch(rn1)
+	{
+		case 0:
+			if(b1==1)
+			{
+				b1=0;
+				setcolor(9);
+				outtextxy(20,380,"!!!...COMPUTER'S MOVE...!!!");
+				setcolor(15);
+				outtextxy(20,380,"!!!...PLAYER'S MOVE...!!!");
+				x1[0]='g';
+				goal(0,0);
+				return 1;
+			}break;
+		case 1:
+			if(b2==1)
+			{
+				b2=0;
+				setcolor(9);
+				outtextxy(20,380,"!!!...COMPUTER'S MOVE...!!!");
+				setcolor(15);
+				outtextxy(20,380,"!!!...PLAYER'S MOVE...!!!");
+				x1[1]='g';
+				goal(80,0);
+				return 1;
+			}break;
+		case 2:
+			if(b3==1)
+			{
+				b3=0;
+				setcolor(9);
+				outtextxy(20,380,"!!!...COMPUTER'S MOVE...!!!");
+				setcolor(15);
+				outtextxy(20,380,"!!!...PLAYER'S MOVE...!!!");
+				x1[2]='g';
+				goal(160,0);
+				return 1;
+			}break;
+		case 3:
+			if(b4==1)
+			{
+				b4=0;
+				setcolor(9);
+				outtextxy(20,380,"!!!...COMPUTER'S MOVE...!!!");
+				setcolor(15);
+				outtextxy(20,380,"!!!...PLAYER'S MOVE...!!!");
+				x1[3]='g';
+				goal(0,80);
+				return 1;
+			}break;
+		case 4:
+			if(b5==1)
+			{
+				b5=0;
+				setcolor(9);
+				outtextxy(20,380,"!!!...COMPUTER'S MOVE...!!!");
+				setcolor(15);
+				outtextxy(20,380,"!!!...PLAYER'S MOVE...!!!");
+				x1[4]='g';
+				goal(80,80);
+				return 1;
+			}break;
+		case 5:
+			if(b6==1)
+			{
+				b6=0;
+				setcolor(9);
+				outtextxy(20,380,"!!!...COMPUTER'S MOVE...!!!");
+				setcolor(15);
+				outtextxy(20,380,"!!!...PLAYER'S MOVE...!!!");
+				x1[5]='g';
+				goal(160,80);
+				return 1;
+			}break;
+		case 6:
+			if(b7==1)
+			{
+				b7=0;
+				setcolor(9);
+				outtextxy(20,380,"!!!...COMPUTER'S MOVE...!!!");
+				setcolor(15);
+				outtextxy(20,380,"!!!...PLAYER'S MOVE...!!!");
+				x1[6]='g';
+				goal(0,160);
+				return 1;
+			}break;
+		case 7:
+			if(b8==1)
+			{
+				b8=0;
+				setcolor(9);
+				outtextxy(20,380,"!!!...COMPUTER'S MOVE...!!!");
+				setcolor(15);
+				outtextxy(20,380,"!!!...PLAYER'S MOVE...!!!");
+				x1[7]='g';
+				goal(80,160);
+				return 1;
+			}break;
+		case 8:
+			if(b9==1)
+			{
+				b9=0;
+				setcolor(9);
+				outtextxy(20,380,"!!!...COMPUTER'S MOVE...!!!");
+				setcolor(15);
+				outtextxy(20,380,"!!!...PLAYER'S MOVE...!!!");
+				x1[8]='g';
+				goal(160,160);
+				return 1;
+			}break;
+	}
+	return 0;
+}
+void chose_comp()
+{
+	if(b1==0&&b2==1&&b3==1&&b4==1&&b5==1&&b6==1&&b7==1&&b8==1&&b9==1)
+	{
+		chose5();
+		while(usr<=3)
+			optn1();
+		if(b2==0)
+		{
+			chose3();
+			while(usr<=5)
+				optn1();
+			if(b7==0)
+			{
+				chose4();
+				while(usr<=7)
+					optn1();
+				if(b6==0)
+				{
+					chose8();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet6();
+			}
+			else
+				jeet7();
+		}
+		else if(b3==0)
+		{
+			chose2();
+			while(usr<=5)
+				optn1();
+			if(b8==0)
+			{
+				chose4();
+				while(usr<=7)
+					optn1();
+				if(b6==0)
+				{
+					prev1:
+					chose9();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet6();
+			}
+			else
+				jeet8();
+		}
+		else if(b4==0)
+		{
+			chose7();
+			while(usr<=5)
+				optn1();
+			if(b3==0)
+			{
+				chose2();
+				while(usr<=7)
+					optn1();
+				if(b8==0)
+				{
+					chose6();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet8();
+			}
+			else
+				jeet3();
+		}
+		else if(b6==0)
+		{
+			chose2();
+			while(usr<=5)
+				optn1();
+			if(b8==0)
+			{
+				chose7();
+				while(usr<=7)
+					optn1();
+				if(b3==0)
+					goto prev1;
+				else
+					jeet3();
+			}
+			else
+				jeet8();
+		}
+		else if(b7==0)
+		{
+			chose4();
+			while(usr<=5)
+				optn1();
+			if(b6==0)
+			{
+				chose2();
+				while(usr<=7)
+					optn1();
+				if(b8==0)
+					goto prev1;
+				else
+					jeet8();
+			}
+			else
+				jeet6();
+		}
+		else if(b8==0)
+		{
+			chose4();
+			while(usr<=5)
+				optn1();
+			if(b6==0)
+			{
+				chose3();
+				while(usr<=7)
+					optn1();
+				if(b7==0)
+					goto prev1;
+				else
+					jeet7();
+			}
+			else
+				jeet6();
+		}
+		else
+		{
+			chose2();
+			while(usr<=5)
+				optn1();
+			if(b8==0)
+			{
+				chose7();
+				while(usr<=7)
+					optn1();
+				if(b3==0)
+				{
+					chose6();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet3();
+			}
+			else
+				jeet8();
+		}
+	}
+	else if(b1==1&&b2==0&&b3==1&&b4==1&&b5==1&&b6==1&&b7==1&&b8==1&&b9==1)
+	{
+		chose5();
+		while(usr<=3)
+			optn1();
+		if(b1==0)
+		{
+			chose3();
+			while(usr<=5)
+				optn1();
+			if(b7==0)
+			{
+				chose4();
+				while(usr<=7)
+					optn1();
+				if(b6==0)
+				{
+					chose8();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet6();
+			}
+			else
+				jeet7();
+		}
+		else if(b3==0)
+		{
+			chose1();
+			while(usr<=5)
+				optn1();
+			if(b9==0)
+			{
+				chose6();
+				while(usr<=7)
+					optn1();
+				if(b4==0)
+				{
+					chose7();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet4();
+			}
+			else
+				jeet9();
+		}
+		else if(b4==0)
+		{
+			chose7();
+			while(usr<=5)
+				optn1();
+			if(b3==0)
+			{
+				chose1();
+				while(usr<=7)
+					optn1();
+				if(b9==0)
+				{
+					chose6();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet9();
+			}
+			else
+				jeet3();
+		}
+		else if(b6==0)
+		{
+			chose3();
+			while(usr<=5)
+				optn1();
+			if(b7==0)
+			{
+				chose9();
+				while(usr<=7)
+					optn1();
+				if(b1==0)
+				{
+					chose4();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet1();
+			}
+			else
+				jeet7();
+		}
+		else if(b7==0)
+		{
+			chose1();
+			while(usr<=5)
+				optn1();
+			if(b9==0)
+			{
+				chose8();
+				while(usr<=7)
+					optn1();
+				if(b3==0)
+				{
+					chose6();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else if(b6==0)
+				{
+					chose3();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+				{
+					chose3();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+			}
+			else
+				jeet9();
+		}
+		else if(b8==0)
+		{
+			chose7();
+			while(usr<=5)
+				optn1();
+			if(b3==0)
+			{
+				chose1();
+				while(usr<=7)
+					optn1();
+				if(b4==0)
+				{
+					chose6();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet4();
+			}
+			else
+				jeet3();
+		}
+		else
+		{
+			chose6();
+			while(usr<=5)
+				optn1();
+			if(b4==0)
+			{
+				chose7();
+				while(usr<=7)
+					optn1();
+				if(b3==0)
+				{
+					chose1();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet3();
+			}
+			else
+				jeet4();
+		}
+	}
+	else if(b1==1&&b2==1&&b3==0&&b4==1&&b5==1&&b6==1&&b7==1&&b8==1&&b9==1)
+	{
+		chose5();
+		while(usr<=3)
+			optn1();
+		if(b1==0)
+		{
+			chose2();
+			while(usr<=5)
+				optn1();
+			if(b8==0)
+			{
+				chose4();
+				while(usr<=7)
+					optn1();
+				if(b6==0)
+				{
+					chose9();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet6();
+			}
+			else
+				jeet8();
+		}
+		else if(b2==0)
+		{
+			chose1();
+			while(usr<=5)
+				optn1();
+			if(b9==0)
+			{
+				chose6();
+				while(usr<=7)
+					optn1();
+				if(b4==0)
+				{
+					chose7();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet4();
+			}
+			else
+				jeet9();
+		}
+		else if(b4==0)
+		{
+			chose8();
+			while(usr<=5)
+				optn1();
+			if(b2==0)
+			{
+				chose1();
+				while(usr<=7)
+					optn1();
+				if(b9==0)
+				{
+					chose6();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet9();
+			}
+			else
+				jeet2();
+		}
+		else if(b6==0)
+		{
+			chose9();
+			while(usr<=5)
+				optn1();
+			if(b1==0)
+			{
+				chose2();
+				while(usr<=7)
+					optn1();
+				if(b8==0)
+				{
+					chose4();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet8();
+			}
+			else
+				jeet1();
+		}
+		else if(b7==0)
+		{
+			chose2();
+			while(usr<=5)
+				optn1();
+			if(b8==0)
+			{
+				chose9();
+				while(usr<=7)
+					optn1();
+				if(b1==0)
+				{
+					chose4();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet1();
+			}
+			else
+				jeet8();
+		}
+		else if(b8==0)
+		{
+			chose6();
+			while(usr<=5)
+				optn1();
+			if(b4==0)
+			{
+				chose1();
+				while(usr<=7)
+					optn1();
+				if(b9==0)
+				{
+					chose7();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet9();
+			}
+			else
+				jeet4();
+		}
+		else
+		{
+			chose6();
+			while(usr<=5)
+				optn1();
+			if(b4==0)
+			{
+				chose8();
+				while(usr<=7)
+					optn1();
+				if(b2==0)
+				{
+					chose1();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet2();
+			}
+			else
+				jeet4();
+		}
+	}
+	else if(b1==1&&b2==1&&b3==1&&b4==0&&b5==1&&b6==1&&b7==1&&b8==1&&b9==1)
+	{
+		chose5();
+		while(usr<=3)
+			optn1();
+		if(b1==0)
+		{
+			chose7();
+			while(usr<=5)
+				optn1();
+			if(b3==0)
+			{
+				chose2();
+				while(usr<=7)
+					optn1();
+				if(b8==0)
+				{
+					chose9();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet8();
+			}
+			else
+				jeet3();
+		}
+		else if(b2==0)
+		{
+			chose1();
+			while(usr<=5)
+				optn1();
+			if(b9==0)
+			{
+				chose7();
+				while(usr<=7)
+					optn1();
+				if(b3==0)
+				{
+					chose6();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet3();
+			}
+			else
+				jeet9();
+		}
+		else if(b3==0)
+		{
+			chose2();
+			while(usr<=5)
+				optn1();
+			if(b8==0)
+			{
+				chose9();
+				while(usr<=7)
+					optn1();
+				if(b1==0)
+				{
+					chose7();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet1();
+			}
+			else
+				jeet8();
+		}
+		else if(b6==0)
+		{
+			prev2:
+			chose9();
+			while(usr<=5)
+				optn1();
+			if(b1==0)
+			{
+				chose7();
+				while(usr<=7)
+					optn1();
+				if(b3==0)
+					jeet8();
+				else
+					jeet3();
+			}
+			else
+				jeet1();
+		}
+		else if(b7==0)
+		{
+			chose1();
+			while(usr<=5)
+				optn1();
+			if(b9==0)
+			{
+				chose8();
+				while(usr<=7)
+					optn1();
+				if(b2==0)
+				{
+					chose6();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet2();
+			}
+			else
+				jeet9();
+		}
+		else if(b8==0)
+		{
+			chose7();
+			while(usr<=5)
+				optn1();
+			if(b3==0)
+			{
+				chose9();
+				while(usr<=7)
+					optn1();
+				if(b1==0)
+				{
+					chose2();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet1();
+			}
+			else
+				jeet3();
+		}
+		else
+		{
+			chose2();
+			while(usr<=5)
+				optn1();
+			if(b8==0)
+			{
+				chose7();
+				while(usr<=7)
+					optn1();
+				if(b3==0)
+				{
+					chose6();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet3();
+			}
+			else
+				jeet8();
+		}
+	}
+	else if(b1==1&&b2==1&&b3==1&&b4==1&&b5==1&&b6==0&&b7==1&&b8==1&&b9==1)
+	{
+		chose5();
+		while(usr<=3)
+			optn1();
+		if(b1==0)
+		{
+			chose8();
+			while(usr<=5)
+				optn1();
+			if(b2==0)
+			{
+				chose3();
+				while(usr<=7)
+					optn1();
+				if(b7==0)
+				{
+					chose4();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet7();
+			}
+			else
+				jeet2();
+		}
+		else if(b2==0)
+		{
+			chose3();
+			while(usr<=5)
+				optn1();
+			if(b7==0)
+			{
+				chose1();
+				while(usr<=7)
+					optn1();
+				if(b4==0)
+				{
+					chose8();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else if(b8==0)
+				{
+					chose9();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+				{
+					chose8();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+			}
+			else
+				jeet2();
+		}
+		else if(b4==0)
+		{
+			goto prev2;
+		}
+		else if(b3==0)
+		{
+			chose9();
+			while(usr<=5)
+				optn1();
+			if(b1==0)
+			{
+				chose2();
+				while(usr<=7)
+					optn1();
+				if(b8==0)
+				{
+					chose4();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet8();
+			}
+			else
+				jeet1();
+		}
+		else if(b7==0)
+		{
+			chose8();
+			while(usr<=5)
+				optn1();
+			if(b2==0)
+			{
+				chose1();
+				while(usr<=7)
+					optn1();
+				if(b9==0)
+				{
+					chose3();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet9();
+			}
+			else
+				jeet2();
+		}
+		else if(b8==0)
+		{
+			chose9();
+			while(usr<=5)
+				optn1();
+			if(b1==0)
+			{
+				chose3();
+				while(usr<=7)
+					optn1();
+				if(b7==0)
+				{
+					chose4();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet7();
+			}
+			else
+				jeet1();
+		}
+		else
+		{
+			chose3();
+			while(usr<=5)
+				optn1();
+			if(b7==0)
+			{
+				chose8();
+				while(usr<=7)
+					optn1();
+				if(b2==0)
+				{
+					chose1();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet2();
+			}
+			else
+				jeet7();
+		}
+	}
+	else if(b1==1&&b2==1&&b3==1&&b4==1&&b5==1&&b6==1&&b7==0&&b8==1&&b9==1)
+	{
+		chose5();
+		while(usr<=3)
+			optn1();
+		if(b1==0)
+		{
+			chose4();
+			while(usr<=5)
+				optn1();
+			if(b6==0)
+			{
+				chose2();
+				while(usr<=7)
+					optn1();
+				if(b8==0)
+				{
+					chose9();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet8();
+			}
+			else
+				jeet6();
+		}
+		else if(b2==0)
+		{
+			chose4();
+			while(usr<=5)
+				optn1();
+			if(b6==0)
+			{
+				chose9();
+				while(usr<=7)
+					optn1();
+				if(b1==0)
+				{
+					chose3();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet4();
+			}
+			else
+				jeet6();
+		}
+		else if(b3==0)
+		{
+			chose6();
+			while(usr<=5)
+				optn1();
+			if(b4==0)
+			{
+				chose1();
+				while(usr<=7)
+					optn1();
+				if(b9==0)
+				{
+					chose8();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet9();
+			}
+			else
+				jeet4();
+		}
+		else if(b4==0)
+		{
+			chose1();
+			while(usr<=5)
+				optn1();
+			if(b9==0)
+			{
+				chose8();
+				while(usr<=7)
+					optn1();
+				if(b2==0)
+				{
+					chose3();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet2();
+			}
+			else
+				jeet9();
+		}
+		else if(b6==0)
+		{
+			chose2();
+			while(usr<=5)
+				optn1();
+			if(b8==0)
+			{
+				chose9();
+				while(usr<=7)
+					optn1();
+				if(b1==0)
+				{
+					chose4();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet1();
+			}
+			else
+				jeet8();
+		}
+		else if(b8==0)
+		{
+			chose9();
+			while(usr<=5)
+				optn1();
+			if(b1==0)
+			{
+				chose4();
+				while(usr<=7)
+					optn1();
+				if(b6==0)
+				{
+					chose2();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet6();
+			}
+			else
+				jeet1();
+		}
+		else
+		{
+			chose8();
+			while(usr<=5)
+				optn1();
+			if(b2==0)
+			{
+				chose4();
+				while(usr<=7)
+					optn1();
+				if(b6==0)
+				{
+					chose3();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet6();
+			}
+			else
+				jeet2();
+		}
+	}
+	else if(b1==1&&b2==1&&b3==1&&b4==1&&b5==1&&b6==1&&b7==1&&b8==0&&b9==1)
+	{
+		chose5();
+		while(usr<=3)
+			optn1();
+		if(b1==0)
+		{
+			chose4();
+			while(usr<=5)
+				optn1();
+			if(b6==0)
+			{
+				chose3();
+				while(usr<=7)
+					optn1();
+				if(b7==0)
+				{
+					chose9();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet7();
+			}
+			else
+				jeet6();
+		}
+		else if(b2==0)
+		{
+			chose1();
+			while(usr<=5)
+				optn1();
+			if(b9==0)
+			{
+				chose7();
+				while(usr<=7)
+					optn1();
+				if(b3==0)
+					jeet4();
+				else if(b4==0)
+					jeet3();
+				else
+					jeet4();
+			}
+			else
+				jeet9();
+		}
+		else if(b3==0)
+		{
+			chose4();
+			while(usr<=5)
+				optn1();
+			if(b6==0)
+			{
+				chose9();
+				while(usr<=7)
+					optn1();
+				if(b1==0)
+				{
+					chose2();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet1();
+			}
+			else
+				jeet6();
+		}
+		else if(b4==0)
+		{
+			chose7();
+			while(usr<=5)
+				optn1();
+			if(b3==0)
+			{
+				chose9();
+				while(usr<=7)
+					optn1();
+				if(b1==0)
+				{
+					chose2();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet1();
+			}
+			else
+				jeet3();
+		}
+		else if(b6==0)
+		{
+			chose9();
+			while(usr<=5)
+				optn1();
+			if(b1==0)
+			{
+				chose3();
+				while(usr<=7)
+					optn1();
+				if(b7==0)
+				{
+					chose4();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet7();
+			}
+			else
+				jeet1();
+		}
+		else if(b7==0)
+		{
+			chose9();
+			while(usr<=5)
+				optn1();
+			if(b1==0)
+			{
+				chose4();
+				while(usr<=7)
+					optn1();
+				if(b6==0)
+				{
+					chose3();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet6();
+			}
+			else
+				jeet1();
+		}
+		else
+		{
+			chose7();
+			while(usr<=5)
+				optn1();
+			if(b3==0)
+			{
+				chose6();
+				while(usr<=7)
+					optn1();
+				if(b4==0)
+				{
+					chose1();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet4();
+			}
+			else
+				jeet3();
+		}
+	}
+	else if(b1==1&&b2==1&&b3==1&&b4==1&&b5==1&&b6==1&&b7==1&&b8==1&&b9==0)
+	{
+		chose5();
+		while(usr<=3)
+			optn1();
+		if(b1==0)
+		{
+			chose4();
+			while(usr<=5)
+				optn1();
+			if(b6==0)
+			{
+				chose3();
+				while(usr<=7)
+					optn1();
+				if(b7==0)
+				{
+					chose8();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet7();
+			}
+			else
+				jeet6();
+		}
+		else if(b2==0)
+		{
+			chose4();
+			while(usr<=5)
+				optn1();
+			if(b6==0)
+			{
+				chose3();
+				while(usr<=7)
+					optn1();
+				if(b7==0)
+				{
+					chose8();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet7();
+			}
+			else
+				jeet6();
+		}
+		else if(b3==0)
+		{
+			chose6();
+			while(usr<=5)
+				optn1();
+			if(b4==0)
+			{
+				chose8();
+				while(usr<=7)
+					optn1();
+				if(b2==0)
+				{
+					chose1();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet2();
+			}
+			else
+				jeet4();
+		}
+		else if(b4==0)
+		{
+			chose8();
+			while(usr<=5)
+				optn1();
+			if(b2==0)
+			{
+				chose3();
+				while(usr<=7)
+					optn1();
+				if(b7==0)
+				{
+					chose1();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet7();
+			}
+			else
+				jeet2();
+		}
+		else if(b6==0)
+		{
+			chose3();
+			while(usr<=5)
+				optn1();
+			if(b7==0)
+			{
+				chose8();
+				while(usr<=7)
+					optn1();
+				if(b2==0)
+				{
+					chose1();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet2();
+			}
+			else
+				jeet7();
+		}
+		else if(b7==0)
+		{
+			chose8();
+			while(usr<=5)
+				optn1();
+			if(b2==0)
+			{
+				chose4();
+				while(usr<=7)
+					optn1();
+				if(b6==0)
+				{
+					chose3();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet6();
+			}
+			else
+				jeet2();
+		}
+		else
+		{
+			chose7();
+			while(usr<=5)
+				optn1();
+			if(b3==0)
+			{
+				chose6();
+				while(usr<=7)
+					optn1();
+				if(b4==0)
+				{
+					chose1();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet4();
+			}
+			else
+				jeet3();
+		}
+	}
+	else if(b1==1&&b2==1&&b3==1&&b4==1&&b5==0&&b6==1&&b7==1&&b8==1&&b9==1)
+	{
+		chose1();
+		while(usr<=3)
+			optn1();
+		if(b2==0)
+		{
+			chose8();
+			while(usr<=5)
+				optn1();
+			if(b3==0)
+			{
+				chose7();
+				while(usr<=7)
+					optn1();
+				if(b4==0)
+				{
+					chose6();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet4();
+			}
+			else if(b7==0)
+			{
+				chose3();
+				while(usr<=7)
+					optn1();
+				if(b4==0)
+				{
+					chose6();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else if(b6==0)
+				{
+					chose4();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+			}
+			else if(b4==0)
+			{
+				chose6();
+				while(usr<=7)
+					optn1();
+				if(b3==0)
+				{
+					chose7();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else if(b7==0)
+				{
+					chose3();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+			}
+			else if(b6==0)
+			{
+				chose4();
+				while(usr<=7)
+					optn1();
+				if(b7==0)
+				{
+					chose3();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet7();
+			}
+			else
+			{
+				chose7();
+				while(usr<=7)
+					optn1();
+				if(b4==0)
+				{
+					chose6();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet4();
+			}
+		}
+		else if(b3==0)
+		{
+			chose7();
+			while(usr<=5)
+				optn1();
+			if(b4==0)
+			{
+				chose6();
+				while(usr<=7)
+					optn1();
+				if(b2==0)
+				{
+					chose8();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else if(b8==0)
+				{
+					chose2();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+				{
+					chose8();
+					while(usr<9)
+						optn1();
+					chkl();
+				}
+			}
+			else
+				jeet9();
+		}
+		else if(b4==0)
+		{
+			chose6();
+			while(usr<=5)
+				optn1();
+			if(b2==0)
+			{
+				chose8();
+				while(usr<=7)
+					optn1();
+				if(b3==0)
+				{
+					chose7();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+				{
+					chose3();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+			}
+			else if(b3==0)
+			{
+				chose7();
+				while(usr<=7)
+					optn1();
+				if(b2==0||b9==0)
+				{
+					chose8();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+				{
+					chose2();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+			}
+			else if(b7==0)
+			{
+				chose3();
+				while(usr<=7)
+					optn1();
+				if(b2==0)
+				{
+					chose8();
+					while(usr<=9)
+						optn1();
+				}
+				else
+					jeet2();
+			}
+			else if(b8==0)
+			{
+				chose2();
+				while(usr<=7)
+					optn1();
+				if(b3==0)
+				{
+					chose7();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet3();
+			}
+			else
+			{
+				chose3();
+				while(usr<=7)
+					optn1();
+				if(b2==0)
+				{
+					chose8();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet2();
+			}
+		}
+		else if(b6==0)
+		{
+			chose4();
+			while(usr<=5)
+				optn1();
+			if(b7==0)
+			{
+				chose3();
+				while(usr<=7)
+					optn1();
+				if(b2==0)
+				{
+					chose8();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet2();
+			}
+			else
+				jeet7();
+		}
+		else if(b7==0)
+		{
+			chose3();
+			while(usr<=5)
+				optn1();
+			if(b2==0)
+			{
+				chose8();
+				while(usr<=7)
+					optn1();
+				if(b4==0)
+				{
+					chose6();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else if(b6==0)
+				{
+					chose4();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+				{
+					chose4();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+			}
+			else
+				jeet2();
+		}
+		else if(b8==0)
+		{
+			chose2();
+			while(usr<=5)
+				optn1();
+			if(b3==0)
+			{
+				chose7();
+				while(usr<=7)
+					optn1();
+				if(b4==0)
+				{
+					chose6();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+					jeet4();
+			}
+			else
+				jeet3();
+		}
+		else
+		{
+			chose3();
+			while(usr<=5)
+				optn1();
+			if(b2==0)
+			{
+				chose8();
+				while(usr<=7)
+					optn1();
+				if(b4==0)
+				{
+					chose6();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+				else
+				{
+					chose4();
+					while(usr<=9)
+						optn1();
+					chkl();
+				}
+			}
+			else
+				jeet4();
+		}
+	}
+}
+void easy()
+{
+	int tvk;
+	usr=1;
+	sqbox();
+	setcolor(15);
+	outtextxy(20,380,"!!!...PLAYER'S MOVE...!!!");
+	callmouse();
+	while(usr<=9)
+	{
+		if(usr%2==0)
+		{
+			tvk=random_comp();
+			if(tvk==0)
+				usr--;
+		}
+		else
+			optn1();
+		chkl();
+	}
+		delay(1000);
+		mousehide();
+		cleardevice();
+		setcolor(RED);
+		setfillstyle(1,RED);
+		rectangle(0,0,getmaxx(),getmaxy());
+		rectangle(1,1,getmaxx()-1,getmaxy()-1);
+		rectangle(getmaxx()-20,0,getmaxx(),20);
+		floodfill(getmaxx()-5,5,RED);
+		setcolor(15);
+		outtextxy(90,150,"MATCH  IS  DRAW");
+		line(getmaxx()-20,0,getmaxx(),20);
+		line(getmaxx(),0,getmaxx()-20,20);
+		callmouse();
+		setposi(xp,yp);
+		while(1)
+		{
+			mouseposi(xp,yp,cl);
+			if(xp>=getmaxx()-20&&xp<=getmaxx()&&yp>=0&&yp<=20&&cl==1)
+			{
+				sound(400);
+				delay(250);
+				nosound();
+				main();
+			}
+		}
+}
+void hard()
+{
+	usr=1;
+	sqbox();
+	setcolor(15);
+	outtextxy(20,380,"!!!...PLAYER'S MOVE...!!!");
+	callmouse();
+	while(usr<=1)
+	{
+		optn1();
+	}
+	chose_comp();
+		delay(1000);
+		mousehide();
+		cleardevice();
+		setcolor(RED);
+		setfillstyle(1,RED);
+		rectangle(0,0,getmaxx(),getmaxy());
+		rectangle(1,1,getmaxx()-1,getmaxy()-1);
+		rectangle(getmaxx()-20,0,getmaxx(),20);
+		floodfill(getmaxx()-5,5,RED);
+		setcolor(15);
+		outtextxy(90,150,"MATCH  IS  DRAW");
+		line(getmaxx()-20,0,getmaxx(),20);
+		line(getmaxx(),0,getmaxx()-20,20);
+		callmouse();
+		setposi(xp,yp);
+		while(1)
+		{
+			mouseposi(xp,yp,cl);
+			if(xp>=getmaxx()-20&&xp<=getmaxx()&&yp>=0&&yp<=20&&cl==1)
+			{
+				sound(400);
+				delay(250);
+				nosound();
+				main();
+			}
+		}
+}
+void optn1()//int b1,int b2,int b3,int b4,int b5,int b6,int b7,int b8,int b9)
+{
+	mouseposi(xp,yp,cl);
+	if(b1==1)
+	{
+		if(xp>=160&&xp<=240&&yp>=80&&yp<=160&&cl==1)
+		{
+			sound(400);
+			delay(250);
+			nosound();
+			b1=0;usr++;
+			mousehide();
+			if(usr%2==0)
+			{
+				x1[0]='c';
+				cross(0,0);
+				if(compl==1)
+				{
+					setcolor(9);
+					outtextxy(20,380,"!!!...PLAYER'S MOVE...!!!");
+					setcolor(15);
+					outtextxy(20,380,"!!!...COMPUTER'S MOVE...!!!");
+				}
+				else
+				{
+					setcolor(9);
+					outtextxy(20,380,"!!!...PLAYER 1");
+					setcolor(15);
+					outtextxy(20,380,"!!!...PLAYER 2");
+				}
+			}
+			else
+			{
+				x1[0]='g';
+				goal(0,0);
+				setcolor(9);
+				outtextxy(20,380,"!!!...PLAYER 2");
+				setcolor(15);
+				outtextxy(20,380,"!!!...PLAYER 1");
+			}
+			callmouse();
+			setposi(xp,yp);
+		}
+	}
+	if(b2==1)
+	{
+		if(xp>=240&&xp<=320&&yp>=80&&yp<=160&&cl==1)
+		{
+			sound(400);
+			delay(250);
+			nosound();
+			b2=0;usr++;
+			mousehide();
+			if(usr%2==0)
+			{
+				x1[1]='c';
+				cross(80,0);
+				if(compl==1)
+				{
+					setcolor(9);
+					outtextxy(20,380,"!!!...PLAYER'S MOVE...!!!");
+					setcolor(15);
+					outtextxy(20,380,"!!!...COMPUTER'S MOVE...!!!");
+				}
+				else
+				{
+					setcolor(9);
+					outtextxy(20,380,"!!!...PLAYER 1");
+					setcolor(15);
+					outtextxy(20,380,"!!!...PLAYER 2");
+				}
+			}
+			else
+			{
+				x1[1]='g';
+				goal(80,0);
+				setcolor(9);
+				outtextxy(20,380,"!!!...PLAYER 2");
+				setcolor(15);
+				outtextxy(20,380,"!!!...PLAYER 1");
+			}
+			callmouse();
+			setposi(xp,yp);
+		}
+	}
+	if(b3==1)
+	{
+		if(xp>=320&&xp<=400&&yp>=80&&yp<=160&&cl==1)
+		{
+			sound(400);
+			delay(250);
+			nosound();
+			b3=0;usr++;
+			mousehide();
+			if(usr%2==0)
+			{
+				x1[2]='c';
+				cross(160,0);
+				if(compl==1)
+				{
+					setcolor(9);
+					outtextxy(20,380,"!!!...PLAYER'S MOVE...!!!");
+					setcolor(15);
+					outtextxy(20,380,"!!!...COMPUTER'S MOVE...!!!");
+				}
+				else
+				{
+					setcolor(9);
+					outtextxy(20,380,"!!!...PLAYER 1");
+					setcolor(15);
+					outtextxy(20,380,"!!!...PLAYER 2");
+				}
+			}
+			else
+			{
+				x1[2]='g';
+				goal(160,0);
+				setcolor(9);
+				outtextxy(20,380,"!!!...PLAYER 2");
+				setcolor(15);
+				outtextxy(20,380,"!!!...PLAYER 1");
+			}
+			callmouse();
+			setposi(xp,yp);
+		}
+	}
+	if(b4==1)
+	{
+		if(xp>=160&&xp<=240&&yp>=160&&yp<=240&&cl==1)
+		{
+			sound(400);
+			delay(250);
+			nosound();
+			b4=0;usr++;
+			mousehide();
+			if(usr%2==0)
+			{
+				x1[3]='c';
+				cross(0,80);
+				if(compl==1)
+				{
+					setcolor(9);
+					outtextxy(20,380,"!!!...PLAYER'S MOVE...!!!");
+					setcolor(15);
+					outtextxy(20,380,"!!!...COMPUTER'S MOVE...!!!");
+				}
+				else
+				{
+					setcolor(9);
+					outtextxy(20,380,"!!!...PLAYER 1");
+					setcolor(15);
+					outtextxy(20,380,"!!!...PLAYER 2");
+				}
+			}
+			else
+			{
+				x1[3]='g';
+				goal(0,80);
+				setcolor(9);
+				outtextxy(20,380,"!!!...PLAYER 2");
+				setcolor(15);
+				outtextxy(20,380,"!!!...PLAYER 1");
+			}
+			callmouse();
+			setposi(xp,yp);
+		}
+	}
+	if(b5==1)
+	{
+		if(xp>=240&&xp<=320&&yp>=160&&yp<=240&&cl==1)
+		{
+			sound(400);
+			delay(250);
+			nosound();
+			b5=0;usr++;
+			mousehide();
+			if(usr%2==0)
+			{
+				x1[4]='c';
+				cross(80,80);
+				if(compl==1)
+				{
+					setcolor(9);
+					outtextxy(20,380,"!!!...PLAYER'S MOVE...!!!");
+					setcolor(15);
+					outtextxy(20,380,"!!!...COMPUTER'S MOVE...!!!");
+				}
+				else
+				{
+					setcolor(9);
+					outtextxy(20,380,"!!!...PLAYER 1");
+					setcolor(15);
+					outtextxy(20,380,"!!!...PLAYER 2");
+				}
+			}
+			else
+			{
+				x1[4]='g';
+				goal(80,80);
+				setcolor(9);
+				outtextxy(20,380,"!!!...PLAYER 2");
+				setcolor(15);
+				outtextxy(20,380,"!!!...PLAYER 1");			}
+			callmouse();
+			setposi(xp,yp);
+		}
+	}
+	if(b6==1)
+	{
+		if(xp>=320&&xp<=400&&yp>=160&&yp<=240&&cl==1)
+		{
+			sound(400);
+			delay(250);
+			nosound();
+			b6=0;usr++;
+			mousehide();
+			if(usr%2==0)
+			{
+				x1[5]='c';
+				cross(160,80);
+				if(compl==1)
+				{
+					setcolor(9);
+					outtextxy(20,380,"!!!...PLAYER'S MOVE...!!!");
+					setcolor(15);
+					outtextxy(20,380,"!!!...COMPUTER'S MOVE...!!!");
+				}
+				else
+				{
+					setcolor(9);
+					outtextxy(20,380,"!!!...PLAYER 1");
+					setcolor(15);
+					outtextxy(20,380,"!!!...PLAYER 2");
+				}
+			}
+			else
+			{
+				x1[5]='g';
+				goal(160,80);
+				setcolor(9);
+				outtextxy(20,380,"!!!...PLAYER 2");
+				setcolor(15);
+				outtextxy(20,380,"!!!...PLAYER 1");
+			}
+			callmouse();
+			setposi(xp,yp);
+		}
+	}
+	if(b7==1)
+	{
+		if(xp>=160&&xp<=240&&yp>240&&yp<=320&&cl==1)
+		{
+			sound(400);
+			delay(250);
+			nosound();
+			b7=0;usr++;
+			mousehide();
+			if(usr%2==0)
+			{
+				x1[6]='c';
+				cross(0,160);
+				if(compl==1)
+				{
+					setcolor(9);
+					outtextxy(20,380,"!!!...PLAYER'S MOVE...!!!");
+					setcolor(15);
+					outtextxy(20,380,"!!!...COMPUTER'S MOVE...!!!");
+				}
+				else
+				{
+					setcolor(9);
+					outtextxy(20,380,"!!!...PLAYER 1");
+					setcolor(15);
+					outtextxy(20,380,"!!!...PLAYER 2");
+				}
+			}
+			else
+			{
+				x1[6]='g';
+				goal(0,160);
+				setcolor(9);
+				outtextxy(20,380,"!!!...PLAYER 2");
+				setcolor(15);
+				outtextxy(20,380,"!!!...PLAYER 1");
+			}
+			callmouse();
+			setposi(xp,yp);
+		}
+	}
+	if(b8==1)
+	{
+		if(xp>=240&&xp<=320&&yp>=240&&yp<=320&&cl==1)
+		{
+			sound(400);
+			delay(250);
+			nosound();
+			b8=0;usr++;
+			mousehide();
+			if(usr%2==0)
+			{
+				x1[7]='c';
+				cross(80,160);
+				if(compl==1)
+				{
+					setcolor(9);
+					outtextxy(20,380,"!!!...PLAYER'S MOVE...!!!");
+					setcolor(15);
+					outtextxy(20,380,"!!!...COMPUTER'S MOVE...!!!");
+				}
+				else
+				{
+					setcolor(9);
+					outtextxy(20,380,"!!!...PLAYER 1");
+					setcolor(15);
+					outtextxy(20,380,"!!!...PLAYER 2");
+				}
+			}
+			else
+			{
+				x1[7]='g';
+				goal(80,160);
+				setcolor(9);
+				outtextxy(20,380,"!!!...PLAYER 2");
+				setcolor(15);
+				outtextxy(20,380,"!!!...PLAYER 1");
+			}
+			callmouse();
+			setposi(xp,yp);
+		}
+	}
+	if(b9==1)
+	{
+		if(xp>=320&&xp<=400&&yp>=240&&yp<=320&&cl==1)
+		{
+			sound(400);
+			delay(250);
+			nosound();
+			b9=0;usr++;
+			mousehide();
+			if(usr%2==0)
+			{
+				x1[8]='c';
+				cross(160,160);
+				if(compl==1)
+				{
+					setcolor(9);
+					outtextxy(20,380,"!!!...PLAYER'S MOVE...!!!");
+					setcolor(15);
+					outtextxy(20,380,"!!!...COMPUTER'S MOVE...!!!");
+				}
+				else
+				{
+					setcolor(9);
+					outtextxy(20,380,"!!!...PLAYER 1");
+					setcolor(15);
+					outtextxy(20,380,"!!!...PLAYER 2");
+				}
+			}
+			else
+			{
+				x1[8]='g';
+				goal(160,160);
+				setcolor(9);
+				outtextxy(20,380,"!!!...PLAYER 2");
+				setcolor(15);
+				outtextxy(20,380,"!!!...PLAYER 1");
+			}
+			callmouse();
+			setposi(xp,yp);
+		}
+	}
+	if(xp>=getmaxx()-20&&xp<=getmaxx()&&yp>=0&&yp<=20&&cl==1)
+	{
+		sound(400);
+		delay(250);
+		nosound();
+		main();
+	}
+}
+void cross(int i1,int i2)
+{
+	setcolor(9);
+	line(162+i1,82+i2,238+i1,158+i2);
+	line(238+i1,82+i2,162+i1,158+i2);
+}
+void goal(int j1,int j2)
+{
+	setcolor(GREEN);
+	setfillstyle(1,GREEN);
+	circle(200+j1,120+j2,35);
+	floodfill(200+j1,120+j2,GREEN);
+}
+void sqbox()
+{
+	mousehide();
+	cleardevice();
+	setbkcolor(9);
+	setcolor(RED);
+	setfillstyle(1,15);
+	settextstyle(SANS_SERIF_FONT,HORIZ_DIR,6);
+	outtextxy(130,5,"TIC TAC TOE");
+	rectangle(160,80,400,320);
+	floodfill(165,105,RED);
+	//line(160,80,160,400);
+	line(240,80,240,400-80);
+	line(320,80,320,400-80);
+	line(80*2,160,400,160);
+	line(80*2,240,400,240);
+	//line(80,320,400,320);
+	setfillstyle(1,RED);
+	//settextstyle(BOLD_FONT,HORIZ_DIR,2);
+	rectangle(0,0,getmaxx(),getmaxy());	       //Border Line
+	rectangle(1,1,getmaxx()-1,getmaxy()-1);               //Border Line
+	rectangle(getmaxx()-20,0,getmaxx(),20);
+	floodfill(getmaxx()-5,5,RED);
+	setcolor(15);
+	line(getmaxx()-20,0,getmaxx(),20);
+	line(getmaxx(),0,getmaxx()-20,20);
+	callmouse();
+	setposi(xp,yp);
+}
+void chkl()
+{
+	setcolor(MAGENTA);
+	if(x1[0]=='c'&&x1[1]=='c'&&x1[2]=='c')
+		line(160,120,400,120);
+	if(x1[3]=='c'&&x1[4]=='c'&&x1[5]=='c')
+		line(160,200,400,200);
+	if(x1[6]=='c'&&x1[7]=='c'&&x1[8]=='c')
+		line(160,280,400,280);
+	if(x1[0]=='c'&&x1[3]=='c'&&x1[6]=='c')
+		line(200,80,200,320);
+	if(x1[1]=='c'&&x1[4]=='c'&&x1[7]=='c')
+		line(280,80,280,320);
+	if(x1[2]=='c'&&x1[5]=='c'&&x1[8]=='c')
+		line(360,80,360,320);
+	if(x1[0]=='c'&&x1[4]=='c'&&x1[8]=='c')
+		line(160,80,400,320);
+	if(x1[2]=='c'&&x1[4]=='c'&&x1[6]=='c')
+		line(400,80,160,320);
+	if(x1[0]=='g'&&x1[1]=='g'&&x1[2]=='g')
+		line(160,120,400,120);
+	if(x1[3]=='g'&&x1[4]=='g'&&x1[5]=='g')
+		line(160,200,400,200);
+	if(x1[6]=='g'&&x1[7]=='g'&&x1[8]=='g')
+		line(160,280,400,280);
+	if(x1[0]=='g'&&x1[3]=='g'&&x1[6]=='g')
+		line(200,80,200,320);
+	if(x1[1]=='g'&&x1[4]=='g'&&x1[7]=='g')
+		line(280,80,280,320);
+	if(x1[2]=='g'&&x1[5]=='g'&&x1[8]=='g')
+		line(360,80,360,320);
+	if(x1[0]=='g'&&x1[4]=='g'&&x1[8]=='g')
+		line(160,80,400,320);
+	if(x1[2]=='g'&&x1[4]=='g'&&x1[6]=='g')
+		line(400,80,160,320);
+	if((x1[0]=='c'&&x1[1]=='c'&&x1[2]=='c')||(x1[3]=='c'&&x1[4]=='c'&&x1[5]=='c')||(x1[6]=='c'&&x1[7]=='c'&&x1[8]=='c')||(x1[0]=='c'&&x1[3]=='c'&&x1[6]=='c')||(x1[1]=='c'&&x1[4]=='c'&&x1[7]=='c')||(x1[2]=='c'&&x1[5]=='c'&&x1[8]=='c')||(x1[0]=='c'&&x1[4]=='c'&&x1[8]=='c')||(x1[2]=='c'&&x1[4]=='c'&&x1[6]=='c'))
+	{
+		delay(1000);
+		mousehide();
+		cleardevice();
+		setcolor(RED);
+		setfillstyle(1,RED);
+		rectangle(0,0,getmaxx(),getmaxy());
+		rectangle(1,1,getmaxx()-1,getmaxy()-1);
+		rectangle(getmaxx()-20,0,getmaxx(),20);
+		floodfill(getmaxx()-5,5,RED);
+		setcolor(15);
+		outtextxy(100,100,"Player 1 Wins");
+		line(getmaxx()-20,0,getmaxx(),20);
+		line(getmaxx(),0,getmaxx()-20,20);
+		callmouse();
+		setposi(xp,yp);
+		while(1)
+		{
+			mouseposi(xp,yp,cl);
+			if(xp>=getmaxx()-20&&xp<=getmaxx()&&yp>=0&&yp<=20&&cl==1)
+			{
+				sound(400);
+				delay(250);
+				nosound();
+				main();
+			}
+		}
+	}
+	else if((x1[0]=='g'&&x1[1]=='g'&&x1[2]=='g')||(x1[3]=='g'&&x1[4]=='g'&&x1[5]=='g')||(x1[6]=='g'&&x1[7]=='g'&&x1[8]=='g')||(x1[0]=='g'&&x1[3]=='g'&&x1[6]=='g')||(x1[1]=='g'&&x1[4]=='g'&&x1[7]=='g')||(x1[2]=='g'&&x1[5]=='g'&&x1[8]=='g')||(x1[0]=='g'&&x1[4]=='g'&&x1[8]=='g')||(x1[2]=='g'&&x1[4]=='g'&&x1[6]=='g'))
+	{
+		delay(1000);
+		mousehide();
+		cleardevice();
+		setcolor(RED);
+		setfillstyle(1,RED);
+		rectangle(0,0,getmaxx(),getmaxy());
+		rectangle(1,1,getmaxx()-1,getmaxy()-1);
+		rectangle(getmaxx()-20,0,getmaxx(),20);
+		floodfill(getmaxx()-5,5,RED);
+		setcolor(15);
+		if(compl==1)
+			outtextxy(100,100,"COMPUTER WINS");
+		else
+			outtextxy(100,100,"Player 2 Wins");
+		line(getmaxx()-20,0,getmaxx(),20);
+		line(getmaxx(),0,getmaxx()-20,20);
+		callmouse();
+		setposi(xp,yp);
+		while(1)
+		{
+			mouseposi(xp,yp,cl);
+			if(xp>=getmaxx()-20&&xp<=getmaxx()&&yp>=0&&yp<=20&&cl==1)
+			{
+				sound(400);
+				delay(250);
+				nosound();
+				main();
+			}
+		}
+	}
+}
+void dmenu()
+{
+	setcolor(GREEN);
+	setbkcolor(BLACK);
+	setfillstyle(1,15);
+	settextstyle(BOLD_FONT,HORIZ_DIR,3);
+	outtextxy(60,5,"\"TIC TAC TOE VS COMPUTER\"");
+	outtextxy(255,100,"MENU");
+	rectangle(230,180,380,230);
+	outtextxy(260,175,"EASY");
+	rectangle(230,250,380,300);
+	outtextxy(260,245,"HARD");
+	rectangle(230,320,380,370);
+	outtextxy(260,315,"HELP");
+	//rectangle(230,390,380,440);
+	//outtextxy(260,385,"HELP");
+	floodfill(245,195,GREEN);
+	floodfill(236,256,GREEN);
+	floodfill(236,326,GREEN);
+	//floodfill(236,396,GREEN);
+	rectangle(639-100,479-60,639,479);
+	outtextxy(639-90,479-60,"EXIT");
+	floodfill(560,430,GREEN);
+	callmouse();
+	setposi(xp,yp);
+	while(1)
+	{
+		mouseposi(xp,yp,cl);
+		if(xp>=539&&xp<=639&&yp>=419&&yp<=479&&cl==1)
+		{
+			sound(400);
+			delay(250);
+			nosound();
+			main();
+		}
+		else if(xp>=230&&xp<=380&&yp>=180&&yp<=230&&cl==1)
+		{
+			mousehide();
+			sound(400);
+			delay(250);
+			nosound();
+			easy();
+		}
+		else if(xp>=230&&xp<=380&&yp>=250&&yp<=300&&cl==1)
+		{
+			mousehide();
+			sound(400);
+			delay(250);
+			nosound();
+			hard();
+		}
+		else if(xp>=230&&xp<=380&&yp>=320&&yp<=370&&cl==1)
+		{
+			sound(400);
+			delay(250);
+			nosound();
+			closegraph();
+			cout<<"\n\t\t\tHELP SECTION\n\n\tIT'S A ONE PLAYER GAME\n\ti.e, PLAYER VS COMPUTER";
+			cout<<"\n\n\tFIRST PLAYER WILL GET A CHANCE TO FILL A BOX";
+			cout<<"\n\t\t\"PLAYER HAS A SIGN CROSS\"\n";
+			cout<<"\n\tYOU HAVE TO MATCH THREE CONSEQUTIVE CROSSES TO WIN THE GAME\n";
+			cout<<"\n\n\t\tALL THE BEST\n\n\n\n\t\tPress Any Key To EXIT";
+			getch();
+			initgraph(&gd,&gm,"");
+			setlinestyle(0,1,3);
+			one_player();
+		}
+	}
+}
+void one_player()
+{
+	cleardevice();
+	compl=1;
+	dmenu();
+}
+void two_player()
+{
+	sqbox();
+	setcolor(WHITE);
+	outtextxy(20,380,"!!!...PLAYER 1 MOVE...!!!");
+	while(usr<=9)
+	{
+		optn1();
+		chkl();
+	}
+		delay(1000);
+		mousehide();
+		cleardevice();
+		setcolor(RED);
+		setfillstyle(1,RED);
+		rectangle(0,0,getmaxx(),getmaxy());
+		rectangle(1,1,getmaxx()-1,getmaxy()-1);
+		rectangle(getmaxx()-20,0,getmaxx(),20);
+		floodfill(getmaxx()-5,5,RED);
+		setcolor(15);
+		outtextxy(90,150,"MATCH  IS  DRAW");
+		line(getmaxx()-20,0,getmaxx(),20);
+		line(getmaxx(),0,getmaxx()-20,20);
+		callmouse();
+		setposi(xp,yp);
+		while(1)
+		{
+			mouseposi(xp,yp,cl);
+			if(xp>=getmaxx()-20&&xp<=getmaxx()&&yp>=0&&yp<=20&&cl==1)
+			{
+				sound(400);
+				delay(250);
+				nosound();
+				main();
+			}
+		}
+}
+void mmenu()
+{
+	char s[50];
+	setcolor(GREEN);
+	setbkcolor(BLACK);
+	setfillstyle(1,15);
+	settextstyle(BOLD_FONT,HORIZ_DIR,3);
+	outtextxy(60,5,"LET'S PLAY \" TIC TAC TOE\"");
+	//outtextxy(280,45,"CROREPATI \" (KBC)");
+	outtextxy(255,100,"MENU");
+	rectangle(200,180,420,230);
+	outtextxy(220,175,"1 PLAYER");
+	//rectangle(230,250,380,300);
+	//outtextxy(240,245,"MEDIUM");
+	rectangle(200,320,420,370);
+	outtextxy(220,315,"2 PLAYER");
+	//rectangle(230,390,380,440);
+	//outtextxy(260,385,"HELP");
+	floodfill(240,190,GREEN);
+	//floodfill(231,251,GREEN);
+	floodfill(240,331,GREEN);
+	//floodfill(231,391,GREEN);
+	rectangle(639-100,479-60,639,479);
+	outtextxy(639-90,479-60,"EXIT");
+	floodfill(550,430,GREEN);
+	callmouse();
+	setposi(xp,yp);
+	while(1)
+	{
+		mouseposi(xp,yp,cl);
+		if(xp>=539&&xp<=639&&yp>=419&&yp<=479&&cl==1)
+		{
+			sound(400);
+			delay(250);
+			nosound();
+			closegraph();
+			jmp:
+			for(int lp=0;lp<50;lp++)
+				s[lp]='\0';
+			lp=0;
+			cout<<"\n\n\tEnter The Security Password :-  ";
+			while((s[lp++]=getch())!=13)     //13 ASCII for enter
+			{
+				if(s[lp-1]!=8)           //8 ASCII for backspace
+					cout<<"*";
+				else
+				{
+					lp-=2;
+					if(lp<0)
+					{
+						lp=0;
+						continue;
+					}
+					cout<<"\b \b";
+				}
+			}
+			if(s[0]=='E'&&s[1]=='x'&&s[2]=='c'&&s[3]=='e'&&s[4]=='l'&&s[5]=='l'&&s[6]=='e'&&s[7]=='n'&&s[8]=='t'&&s[9]==13)
+				exit(0);
+			else
+			{
+				clrscr();
+				cout<<"\n\n\tPress M For Main Menu OR Any Key To Re-Type Password :- ";
+				s[0]=getche();
+				if(s[0]=='m'||s[0]=='M')
+					main();
+				else
+					goto jmp;
+			}
+		}
+		else if(xp>=200&&xp<=420&&yp>=180&&yp<=230&&cl==1)
+		{
+			mousehide();
+			sound(400);
+			delay(250);
+			nosound();
+			one_player();
+		}
+		else if(xp>=200&&xp<=420&&yp>=320&&yp<=370&&cl==1)
+		{
+			sound(400);
+			delay(250);
+			nosound();
+			/*closegraph();
+			cout<<"\n\t\t\tHELP SECTION\n\n\t10 Questions Are There\n\tAnd Each Questions Has Four Options In Which One Is Correct";
+			cout<<"\n\n\tThree Lifelines Are There And You Can Choose Only One Lifeline At A Time";
+			cout<<"\n\t\t\"EXCEPT THE AUDIENCE VOTE\"\n";
+			cout<<"\n\tIf You Give 10 Correct Answers Then You Are A GENIUS..\n";
+			cout<<"\n\n\t\tALL THE BEST\n\n\n\n\t\tPress Any Key To EXIT";
+			getch();
+			main();*/
+			two_player();
+		}
+	}
+}
+void main()
+{
+	closegraph();
+	initgraph(&gd,&gm,"");
+	b1=1;b2=1;b3=1;b4=1;b5=1;b6=1;b7=1;b8=1;b9=1;usr=1;compl=0;
+	for(int tv=0;tv<=8;tv++)
+		x1[tv]='t';
+	setlinestyle(0,1,3);
+	mmenu();
+	getch();
+}
